@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'pesquisa_receitas_page.dart';
 
-void main() => runApp(const SaiaDa5aSerieApp());
+void main() => runApp(const DisciplinaFlutterApp());
 
-class SaiaDa5aSerieApp extends StatelessWidget {
-  const SaiaDa5aSerieApp({super.key});
+class DisciplinaFlutterApp extends StatelessWidget {
+  const DisciplinaFlutterApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Saia da 5ª Série',
+      title: 'Disciplina Flutter',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Saia da 5ª Série'),
+        title: const Text('Disciplina Flutter'),
         centerTitle: true,
         backgroundColor: cores.primary,
         foregroundColor: cores.onPrimary,
@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
                   Icon(Icons.school, size: 64),
                   SizedBox(height: 12),
                   Text(
-                    'Bem-vindo ao Saia da 5ª Série!',
+                    'Bem-vindo à Disciplina Flutter!',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),

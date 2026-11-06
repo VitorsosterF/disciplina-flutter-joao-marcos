@@ -149,7 +149,8 @@ void main() {
   });
 
   testWidgets('a tela inicial abre a pesquisa de receitas', (tester) async {
-    await tester.pumpWidget(const SaiaDa5aSerieApp());
+    await tester.pumpWidget(const DisciplinaFlutterApp());
+    expect(find.text('Disciplina Flutter'), findsOneWidget);
 
     final botao = find.text('Pesquisar receitas');
     await tester.ensureVisible(botao);
