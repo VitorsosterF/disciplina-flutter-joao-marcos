@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'pesquisa_receitas_page.dart';
+
 void main() => runApp(const SaiaDa5aSerieApp());
 
 class SaiaDa5aSerieApp extends StatelessWidget {
@@ -101,6 +103,21 @@ class HomePage extends StatelessWidget {
               onPressed: () {},
               icon: const Icon(Icons.emoji_events),
               label: const Text('Ranking'),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton.icon(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const PesquisaReceitasPage(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.search),
+              label: const Text('Pesquisar receitas'),
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
