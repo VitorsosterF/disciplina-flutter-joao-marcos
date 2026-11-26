@@ -1,76 +1,122 @@
 import 'package:flutter/material.dart';
 
-import '../receitas.dart';
+import '../models/receita.dart';
+import '../state/app_scope.dart';
 import '../tema.dart';
+import 'receita_imagem.dart';
 
 class ReceitaCard extends StatelessWidget {
   final Receita receita;
+  final VoidCallback onTap;
 
-  const ReceitaCard({super.key, required this.receita});
+  const ReceitaCard({super.key, required this.receita, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: CoresApp.superficie,
+    final favoritos = AppScope.favoritosDe(context);
+    final favorita = favoritos.contem(receita.id);
+    final detalhes = [
+      receita.tempoResumo,
+      if (receita.dificuldade != null) receita.dificuldade!,
+    ].join('  •  ');
+    final avaliacao = receita.avaliacaoFormatada;
+
+    return Material(
+      color: CoresApp.superficie,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: CoresApp.borda),
+        side: const BorderSide(color: CoresApp.borda),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 78,
-            height: 88,
-            decoration: BoxDecoration(
-              color: CoresApp.imagemFundo,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(
-              Icons.local_pizza,
-              size: 44,
-              color: Color(0xFFC9772B),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    width: 78,
+                    height: 88,
+                    child: ReceitaImagem(url: receita.imagem),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          receita.nome,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            color: CoresApp.texto,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          detalhes,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: CoresApp.textoSecundario,
+                          ),
+                        ),
+                        if (avaliacao != null) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            avaliacao,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: CoresApp.primaria,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: BotaoFavorito(receita: receita, favorita: favorita),
+                ),
+              ],
             ),
           ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    receita.nome,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: CoresApp.texto,
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  Text(
-                    '${receita.minutos} min  •  ${receita.dificuldade}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: CoresApp.textoSecundario,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    receita.notaFormatada,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: CoresApp.primaria,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
+    );
+  }
+}
+
+class BotaoFavorito extends StatelessWidget {
+  final Receita receita;
+  final bool favorita;
+
+  const BotaoFavorito({
+    super.key,
+    required this.receita,
+    required this.favorita,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: favorita ? 'Remover dos favoritos' : 'Adicionar aos favoritos',
+      isSelected: favorita,
+      icon: const Icon(Icons.favorite_border, color: CoresApp.texto),
+      selectedIcon: const Icon(Icons.favorite, color: CoresApp.erro),
+      onPressed: () => AppScope.favoritosDe(context).alternar(receita),
     );
   }
 }

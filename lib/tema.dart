@@ -49,6 +49,24 @@ ThemeData criarTema() {
         fontWeight: FontWeight.bold,
       ),
     ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: CoresApp.superficie,
+      surfaceTintColor: Colors.transparent,
+      indicatorColor: CoresApp.destaque,
+      height: 68,
+      iconTheme: const WidgetStatePropertyAll(
+        IconThemeData(color: CoresApp.texto),
+      ),
+      labelTextStyle: WidgetStateProperty.resolveWith(
+        (estados) => TextStyle(
+          fontSize: 12,
+          color: CoresApp.texto,
+          fontWeight: estados.contains(WidgetState.selected)
+              ? FontWeight.bold
+              : FontWeight.normal,
+        ),
+      ),
+    ),
     dividerTheme: const DividerThemeData(
       color: CoresApp.borda,
       thickness: 1,

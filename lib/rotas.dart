@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
-import 'pesquisa_receitas_page.dart';
+import 'models/receita.dart';
+import 'pages/app_shell.dart';
+import 'pages/detalhes_receita_page.dart';
 
 /// Rotas nomeadas do app.
 abstract final class Rotas {
+  /// Estrutura principal com as abas Explorar e Favoritos.
   static const inicio = '/';
 
-  /// Aceita como argumento opcional o termo (`String`) já digitado na tela inicial.
-  static const pesquisa = '/pesquisa';
+  /// Detalhes; exige uma [Receita] como argumento.
+  static const detalhes = '/detalhes';
 
   static Route<void>? gerar(RouteSettings settings) {
     switch (settings.name) {
       case inicio:
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (_) => const HomePage(),
+          builder: (_) => const AppShell(),
         );
-      case pesquisa:
-        final termo = settings.arguments as String?;
+      case detalhes:
+        final receita = settings.arguments;
+        if (receita is! Receita) return null;
         return MaterialPageRoute<void>(
           settings: settings,
-          builder: (_) => PesquisaReceitasPage(termoInicial: termo),
+          builder: (_) => DetalhesReceitaPage(receita: receita),
         );
     }
     return null;
